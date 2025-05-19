@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AI‑Powered E‑commerce Customer Journey Analyzer (Streamlit)
 
 This prototype ingests anonymized customer‑journey data, uses GPT‑4 to
@@ -12,3 +13,7 @@ extract behavioral insights, and presents them in a simple Streamlit UI.
    pip install -r requirements.txt
 
    $env:OPENAI_API_KEY = "sk..."
+=======
+# ai_customer_journey_analyzer
+AI-Powered E-commerce Customer Journey Analyzer
+>>>>>>> 14fe56614051e4374d0b26da97ef937acfd6c956
