@@ -8,8 +8,7 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-#openai.api_key = os.getenv("OPENAI_API_KEY")
-openai.api_key = "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"
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def _load_sessions_from_str(json_str: str) -> List[dict]:
     data = json.loads(json_str)
