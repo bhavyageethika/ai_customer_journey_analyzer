@@ -1,15 +1,15 @@
-
-
-
-
 import json
 import os
 from collections import Counter
 from typing import Dict, Any, List
 import openai
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
+#openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = "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"
 
 def _load_sessions_from_str(json_str: str) -> List[dict]:
     data = json.loads(json_str)
@@ -71,8 +71,7 @@ def analyze_journeys_from_json(json_str: str) -> Dict[str, str]:
     stats = _basic_stats(sessions)
     try:
         prompt = f"""
-You are a senior e-commerce analyst. Based on the JSON stats below, generate detailed insights with deep statistics numbers for each and generate visualization charts.
-
+You are a senior e-commerce analyst. Based on the JSON stats below, generate detailed insights and statistics.
 Respond with JSON using exactly these keys:
 {{
   "patterns": str,
@@ -91,21 +90,25 @@ STATS:
             messages=[{"role": "user", "content": prompt}],
             temperature=0
         )
+        print("GPT RAW OUTPUT:\n", response.choices[0].message.content)  
+
         return json.loads(response.choices[0].message.content.strip())
+    
     except Exception:
+        #print(" Insight generation failed:")
         return {
-            "patterns": "Users follow homepage → search → product view → cart → checkout.",
-            "differences": "Buyers convert faster and use search less. Abandoners explore more but do not act.",
-            "drop_offs": "Most users drop after product views. Heatmaps by category and session length could help.",
-            "search_analysis": "About 20% of searches don’t lead to product views. Analyze zero-result queries.",
-            "cart_abandonment": "Cart abandonment is ~60%. Drop-off happens post-cart, suggesting checkout friction.",
-            "recommendations": "1. Improve product info\n2. Add cart reminder\n3. Tune search\n4. Simplify checkout"
+            "patterns": "Exception occured set GPT key: example insight Users follow homepage → search → product view → cart → checkout.",
+            "differences": "Exception occured set GPT key:example insight Buyers convert faster and use search less. Abandoners explore more but do not act.",
+            "drop_offs": "Exception occured set GPT key:example insight Most users drop after product views. Heatmaps by category and session length could help.",
+            "search_analysis": "Exception occured set GPT key: example insight About 20 percent of searches don’t lead to product views. Analyze zero-result queries.",
+            "cart_abandonment": "Exception occured set GPT key:example insight Cart abandonment is ~60%. Drop-off happens post-cart, suggesting checkout friction.",
+            "recommendations": "Exception occured set GPT key: example insight Improve product info\n2. Add cart reminder\n3. Tune search\n4. Simplify checkout"
         }
 
 def ask_question(question: str, insights: Dict[str, str]) -> str:
     context = "\n".join(f"{k}: {v}" for k, v in insights.items())
     prompt = f"""
- answer this business question precisely with as many statistics as possible. Be direct, useful, and analytical.
+Use the insights below to answer this business question. Be direct, useful, and analytical.
 
 INSIGHTS:
 {context}
@@ -121,4 +124,6 @@ QUESTION:
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
+        
+        print("GPT call failed:", e)
         return f"(Error: {e})"
