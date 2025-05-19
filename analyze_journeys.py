@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = os.getenv("OPENAI_API_KEY") #ensure no hardcoded key - set as environment variable in .env
 
 def _load_sessions_from_str(json_str: str) -> List[dict]:
     data = json.loads(json_str)
